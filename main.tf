@@ -3,8 +3,8 @@ provider "aws" {
 }
 
 resource "aws_instance" "demo" {
-  ami           = "ami-02b64aa047cb5edf5"
-  instance_type = "t2.micro"
+  ami           = "ami-00d2dbb426772b03a"
+  instance_type = "t3.micro"
 
   tags = {
     Name = "Jenkins-Terraform-Demo"
