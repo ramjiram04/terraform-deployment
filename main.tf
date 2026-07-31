@@ -7,6 +7,6 @@ resource "aws_instance" "demo" {
   instance_type = "t3.micro"
 
   tags = {
-    Name = "Jenkins-Terraform-Demo"
+    Name = "Jenkins-Terraform-Demo-1"
   }
 }
