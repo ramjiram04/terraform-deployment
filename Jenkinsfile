@@ -10,6 +10,7 @@ pipeline {
     environment {
         TF_IN_AUTOMATION = 'true'
         TF_INPUT         = 'false'
+        TF_CLI_ARGS      = '-no-color'
     }
 
     stages {
