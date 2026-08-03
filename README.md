@@ -8,9 +8,9 @@ State is stored in `s3://cloud360-agent-statefile/terraform-generator/terraform.
 
 ## Deployment workflow
 
-1. Add, update, or remove objects in the relevant `config/*.json` file.
+1. Add, update, or remove objects in the relevant `config/*.json` file. EC2 entries include `root_volume_size`; EBS entries identify the target `instance_name` and attachment `device_name`.
 2. Commit the change and merge it into the branch monitored by Jenkins.
-3. Jenkins checks formatting, validates the configuration, creates a saved plan, and applies that exact plan.
+3. Jenkins checks formatting, validates the configuration, creates a saved plan, archives its JSON/text representations, waits for Cloud360 approval, and applies that exact plan. Cloud360 calculates an approximate cost from the plan using the AWS Pricing API.
 
 Object names are stable `for_each` keys. Adding a unique object creates a resource, changing its key can cause replacement, and removing it plans deletion.
 

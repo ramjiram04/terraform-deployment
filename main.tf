@@ -10,7 +10,7 @@ module "ec2" {
   iam_instance_profile = local.organization.iam_instance_profile
   key_name             = local.organization.ec2_key_name
   ansible_username     = local.organization.ansible_username
-  root_volume          = { size = 30, type = "gp3", encrypted = true }
+  root_volume          = { size = each.value.root_volume_size, type = "gp3", encrypted = true }
   monitoring           = true
   tags                 = local.organization.default_tags
 }
@@ -30,6 +30,8 @@ module "ebs" {
   name              = each.value.name
   size              = each.value.size
   availability_zone = local.organization.availability_zone
+  instance_id       = module.ec2[each.value.instance_name].id
+  device_name       = each.value.device_name
   kms_key_id        = local.organization.ebs_kms_key_id
   tags              = local.organization.default_tags
 }
