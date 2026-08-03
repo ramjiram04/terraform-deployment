@@ -19,16 +19,20 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y python3 openssh-server
 printf '%s ALL=(ALL) NOPASSWD:ALL\n' "$ANSIBLE_USER" > "/etc/sudoers.d/$ANSIBLE_USER"
 chmod 0440 "/etc/sudoers.d/$ANSIBLE_USER"
 
-# Ubuntu cloud images disable SSH password authentication by default. A late
-# drop-in overrides the cloud-image setting without editing the packaged file.
+# Ubuntu cloud images set PasswordAuthentication=no in a 60-cloudimg drop-in.
+# OpenSSH uses the first value it reads, so this file must sort before it.
 install -d -m 0755 /etc/ssh/sshd_config.d
-cat > /etc/ssh/sshd_config.d/99-cloud360-password-auth.conf <<'EOF'
+cat > /etc/ssh/sshd_config.d/00-cloud360-password-auth.conf <<'EOF'
 PasswordAuthentication yes
 KbdInteractiveAuthentication no
 UsePAM yes
 EOF
-chmod 0644 /etc/ssh/sshd_config.d/99-cloud360-password-auth.conf
+chmod 0644 /etc/ssh/sshd_config.d/00-cloud360-password-auth.conf
 /usr/sbin/sshd -t
+if ! /usr/sbin/sshd -T | grep -qx 'passwordauthentication yes'; then
+  echo 'Password authentication is not effective in the resolved SSH configuration' >&2
+  exit 1
+fi
 systemctl restart ssh
 
 # Reuse the AMI's provisioned SSH key for the automation account.
