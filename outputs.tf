@@ -7,7 +7,7 @@ output "s3_buckets" {
 }
 
 output "ebs_volumes" {
-  value = { for key, item in module.ebs : key => item.id }
+  value = { for key, item in module.ebs : key => { id = item.id, attachment_id = item.attachment_id } }
 }
 
 output "efs_file_systems" {
