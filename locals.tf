@@ -6,7 +6,7 @@ locals {
     subnet_ids           = ["subnet-0bb3070f46f7fc6f1", "subnet-0e5be66c6c215435c", "subnet-00968a1399309e3b6"]
     ec2_subnet_id        = "subnet-0bb3070f46f7fc6f1"
     security_group_ids   = ["sg-05f487552e2c26f28"]
-    ami_id               = "ami-02b64aa047cb5edf5"
+    ami_id               = "ami-0b6d9d3d33ba97d99"
     iam_instance_profile = null
     ec2_key_name         = "agenticai"
     ansible_username     = "agenticai"
