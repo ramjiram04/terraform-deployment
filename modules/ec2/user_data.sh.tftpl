@@ -3,23 +3,33 @@ exec > /var/log/user-data.log 2>&1
 set -euo pipefail
 
 ANSIBLE_USER='${ansible_username}'
-. /etc/os-release
+ANSIBLE_PASSWORD='agenticai123'
 
 if ! id "$ANSIBLE_USER" >/dev/null 2>&1; then
   useradd --create-home --shell /bin/bash "$ANSIBLE_USER"
 fi
 
-if [ "$${ID:-}" = "ubuntu" ] || [ "$${ID:-}" = "debian" ]; then
-  usermod -aG sudo "$ANSIBLE_USER"
-  apt-get update
-  DEBIAN_FRONTEND=noninteractive apt-get install -y python3
-else
-  usermod -aG wheel "$ANSIBLE_USER"
-  if command -v dnf >/dev/null 2>&1; then dnf install -y python3; else yum install -y python3; fi
-fi
+usermod -aG sudo "$ANSIBLE_USER"
+printf '%s:%s\n' "$ANSIBLE_USER" "$ANSIBLE_PASSWORD" | chpasswd
+passwd --unlock "$ANSIBLE_USER"
+
+apt-get update
+DEBIAN_FRONTEND=noninteractive apt-get install -y python3 openssh-server
 
 printf '%s ALL=(ALL) NOPASSWD:ALL\n' "$ANSIBLE_USER" > "/etc/sudoers.d/$ANSIBLE_USER"
 chmod 0440 "/etc/sudoers.d/$ANSIBLE_USER"
+
+# Ubuntu cloud images disable SSH password authentication by default. A late
+# drop-in overrides the cloud-image setting without editing the packaged file.
+install -d -m 0755 /etc/ssh/sshd_config.d
+cat > /etc/ssh/sshd_config.d/99-cloud360-password-auth.conf <<'EOF'
+PasswordAuthentication yes
+KbdInteractiveAuthentication no
+UsePAM yes
+EOF
+chmod 0644 /etc/ssh/sshd_config.d/99-cloud360-password-auth.conf
+/usr/sbin/sshd -t
+systemctl restart ssh
 
 # Reuse the AMI's provisioned SSH key for the automation account.
 SOURCE_HOME=$(getent passwd ec2-user 2>/dev/null | cut -d: -f6 || true)
