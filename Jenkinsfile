@@ -38,11 +38,11 @@ pipeline {
             steps {
                 sh '''#!/bin/bash
                     set -o pipefail
-                    terraform plan -input=false -out=tfplan 2>&1 | LC_ALL=C tr -cd '\11\12\15\40-\176'
+                    terraform plan -input=false -out=tfplan 2>&1 | sed -E "s/$(printf '\033')\\[[0-9;]*[A-Za-z]//g" | LC_ALL=C tr -cd '\11\12\15\40-\176'
                 '''
                 sh '''#!/bin/bash
                     set -o pipefail
-                    terraform show -no-color tfplan | LC_ALL=C tr -cd '\11\12\15\40-\176' > tfplan.txt
+                    terraform show -no-color tfplan | sed -E "s/$(printf '\033')\\[[0-9;]*[A-Za-z]//g" | LC_ALL=C tr -cd '\11\12\15\40-\176' > tfplan.txt
                 '''
                 sh 'terraform show -json tfplan > tfplan.json'
                 sh 'sha256sum tfplan > tfplan.sha256'
@@ -61,7 +61,7 @@ pipeline {
                 sh 'sha256sum -c tfplan.sha256'
                 sh '''#!/bin/bash
                     set -o pipefail
-                    terraform apply -input=false -auto-approve tfplan 2>&1 | LC_ALL=C tr -cd '\11\12\15\40-\176'
+                    terraform apply -input=false -auto-approve tfplan 2>&1 | sed -E "s/$(printf '\033')\\[[0-9;]*[A-Za-z]//g" | LC_ALL=C tr -cd '\11\12\15\40-\176'
                 '''
                 sh 'terraform output -json > terraform-output.json'
                 archiveArtifacts artifacts: 'terraform-output.json', fingerprint: true
