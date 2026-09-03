@@ -1,11 +1,12 @@
 locals {
   # Organization standards: maintained by the platform team, not deployment users.
-  # Replace the example identifiers once when adopting the framework.
+  # Identifiers discovered for AWS account 645311222557 (default VPC, us-east-1)
+  # during the CloudOps360 POC server recreation.
   organization = {
     aws_region           = "us-east-1"
-    subnet_ids           = ["subnet-0bb3070f46f7fc6f1", "subnet-0e5be66c6c215435c", "subnet-00968a1399309e3b6"]
-    ec2_subnet_id        = "subnet-0bb3070f46f7fc6f1"
-    security_group_ids   = ["sg-05f487552e2c26f28"]
+    subnet_ids           = ["subnet-0d69cba551f07c9bd", "subnet-0eb8cd3fa4403f80a", "subnet-039daf4a4e03a92c5"]
+    ec2_subnet_id        = "subnet-0d69cba551f07c9bd"
+    security_group_ids   = ["sg-02f2f72f717a96cf4"]
     ami_id               = "ami-0b6d9d3d33ba97d99"
     iam_instance_profile = null
     ec2_key_name         = "agenticai"
