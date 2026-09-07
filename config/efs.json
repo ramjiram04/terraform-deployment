@@ -1,5 +1,8 @@
 [
   {
     "name": "efs-data-01"
+  },
+  {
+    "name": "demo-efs-01"
   }
 ]

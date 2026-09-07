@@ -4,5 +4,11 @@
     "size": 10,
     "instance_name": "ec2-01",
     "device_name": "/dev/sdf"
+  },
+  {
+    "name": "demo-data-01",
+    "size": 10,
+    "instance_name": "demo-web-01",
+    "device_name": "/dev/sdf"
   }
 ]
