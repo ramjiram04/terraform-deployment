@@ -10,5 +10,11 @@
     "size": 10,
     "instance_name": "demo-web-01",
     "device_name": "/dev/sdf"
+  },
+  {
+    "name": "demo-data-02",
+    "size": 10,
+    "instance_name": "demo-web-02",
+    "device_name": "/dev/sdf"
   }
 ]

@@ -18,5 +18,10 @@
     "name": "demo-web-01",
     "instance_type": "t3.micro",
     "root_volume_size": 10
+  },
+  {
+    "name": "demo-web-02",
+    "instance_type": "t3.micro",
+    "root_volume_size": 10
   }
 ]
